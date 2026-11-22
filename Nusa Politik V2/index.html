@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nusa Politik 2.0 — Malaysian Political Simulation</title>
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --warning: #f59e0b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background: var(--bg-dark); color: var(--text-main); line-height: 1.5; padding: 16px; }
+
+    .container { max-width: 1100px; margin: 0 auto; display: grid; gap: 16px; }
+    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+    
+    /* Top HUD */
+    .hud-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+    .hud-stats { display: flex; flex-wrap: wrap; gap: 16px; font-size: 0.9rem; }
+    .stat-pill { background: #0f172a; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); }
+    .stat-pill strong { color: var(--accent); }
+
+    /* Party Switcher Bar (For testing all 9 Party Engines live) */
+    .party-switcher { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-top: 10px; border-top: 1px solid var(--border); }
+    select, button {
+      background: #0f172a; color: var(--text-main); border: 1px solid var(--border);
+      padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 600;
+    }
+    button:hover:not(:disabled) { border-color: var(--accent); background: #1e293b; }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-primary { background: #0284c7; border-color: #0369a1; }
+    .btn-primary:hover:not(:disabled) { background: #0369a1; }
+
+    /* Dynamic Party Engine Layout */
+    .grid-2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; }
+    @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    .constitution-box {
+      background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent);
+      padding: 12px; border-radius: 6px; margin: 12px 0; font-size: 0.9rem;
+    }
+    .locked-badge {
+      display: inline-block; background: rgba(239, 68, 68, 0.15); color: #fca5a5;
+      border: 1px solid var(--danger); font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; margin: 4px 4px 0 0;
+    }
+
+    .action-grid { display: grid; gap: 10px; margin-top: 12px; }
+    .action-card {
+      background: #0f172a; border: 1px solid var(--border); border-radius: 8px; padding: 12px;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    }
+    .action-card.is-locked { border-color: rgba(239, 68, 68, 0.4); opacity: 0.7; }
+    .action-meta { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; }
+
+    .news-item { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+    .news-item:last-child { border-bottom: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- TOP HUD -->
+    <header class="card">
+      <div class="hud-bar">
+        <div>
+          <h1 style="font-size: 1.25rem;">NUSA POLITIK <span style="color: var(--accent);">2.0</span></h1>
+          <small id="hud-date" style="color: var(--text-muted);">January 2026 • Turn 1</small>
+        </div>
+        <div class="hud-stats" id="hud-stats"></div>
+        <button id="btn-next-turn" class="btn-primary">Advance Month &rarr;</button>
+      </div>
+
+      <!-- Party Selector to test different Party Engines -->
+      <div class="party-switcher">
+        <label for="party-select" style="font-size: 0.85rem; color: var(--text-muted);">Active Party Engine:</label>
+        <select id="party-select"></select>
+        <span id="engine-badge" class="stat-pill" style="font-size: 0.8rem;"></span>
+      </div>
+    </header>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="grid-2">
+      <!-- Left: Dynamic Party Constitution & Engine Actions -->
+      <section class="card" id="party-tab-container"></section>
+
+      <!-- Right: Live Political Ticker & Constitutional Logs -->
+      <aside class="card">
+        <h2 style="font-size: 1.05rem; margin-bottom: 8px;">Political & Party Chronicle</h2>
+        <div id="news-feed"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
